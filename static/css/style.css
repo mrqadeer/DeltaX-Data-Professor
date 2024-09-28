@@ -1,0 +1,70 @@
+/* Custom CSS for Streamlit */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+
+/* Styling for the logo in the sidebar */
+.stLogo{
+    display: flex; /* Ensure it's centered within a container */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    border-radius: 10px; /* Smooth rounded corners */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for hover effects */
+}
+
+/* Hover effect for the logo */
+.stLogo:hover {
+    transform: scale(1.5); /* Slight zoom effect on hover */
+    box-shadow: 0px 4px 15px rgba(242, 255, 0, 0.3); /* Subtle shadow effect to make the logo pop */
+}
+
+/* Logo image or SVG adjustments (optional) */
+.stLogo img {
+    max-width: 100%; /* Ensure the logo scales properly */
+    height: auto; /* Maintain aspect ratio */
+    border-radius: 5px; /* Optional: rounded corners for the logo image */
+}
+
+/* home page sidebar */
+/* Styling the icons */
+.st-emotion-cache-mpkxq4.e16edly10 {
+    color: rgb(255, 255, 255); /* Initial icon color */
+    transition: transform 0.3s ease, color 0.3s ease; /* Smooth transition for scaling and color */
+}
+
+/* Styling the text (spans) */
+.st-emotion-cache-1dj0hjr.eczjsme13, /* First label class */
+.st-emotion-cache-1q2d4ya.eczjsme13 { /* Second label class */
+    color: chocolate; /* Initial text color */
+    transition: transform 0.3s ease, color 0.3s ease; /* Smooth transition for scaling and color */
+    margin-left: 8px; /* Spacing between icon and text */
+}
+
+/* Hover effect on both icon and text (first set) */
+.st-emotion-cache-mpkxq4.e16edly10:hover,
+.st-emotion-cache-1dj0hjr.eczjsme13:hover {
+    transform: scale(1.1); /* Scale up icon and text slightly */
+    color: #d2691e; /* Darken text color */
+}
+
+/* Ensure both icon and text scale together when either is hovered (first set) */
+.st-emotion-cache-mpkxq4.e16edly10:hover ~ .st-emotion-cache-1dj0hjr.eczjsme13,
+.st-emotion-cache-1dj0hjr.eczjsme13:hover ~ .st-emotion-cache-mpkxq4.e16edly10 {
+    transform: scale(1.1); /* Synchronized scaling */
+    color: #d2691e;
+}
+
+/* Hover effect on both icon and text (second set) */
+.st-emotion-cache-mpkxq4.e16edly10:hover,
+.st-emotion-cache-1q2d4ya.eczjsme13:hover {
+    transform: scale(1.1); /* Scale up icon and text slightly */
+    color: #d2691e; /* Darken text color */
+}
+
+/* Ensure both icon and text scale together when either is hovered (second set) */
+.st-emotion-cache-mpkxq4.e16edly10:hover ~ .st-emotion-cache-1q2d4ya.eczjsme13,
+.st-emotion-cache-1q2d4ya.eczjsme13:hover ~ .st-emotion-cache-mpkxq4.e16edly10 {
+    transform: scale(1.1); /* Synchronized scaling */
+    color: #d2691e;
+}
+
+
