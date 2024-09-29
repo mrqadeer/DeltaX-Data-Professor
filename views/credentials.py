@@ -1,39 +1,31 @@
 import streamlit as st
 from components.input_components import get_credentials
+from utils.contsant import PROVIDERS
+
 
 def credentials_page():
-
-    st.header("Delta Data Professor Credentials", anchor=False)
-
-
-    # HTML content with bulleted list and clickable links
-    st.markdown("""
-        <div class="api-container">
-            <p>Before you get started, kindly get your API Keys from any of the following providers:</p>
-            <ul>
-                <li><a href="https://platform.openai.com/signup" target="_blank">OpenAI</a></li>
-                <li><a href="https://cloud.google.com/gemini/" target="_blank">Google Gemini</a></li>
-                <li><a href="https://groq.com/" target="_blank">Groq</a></li>
-                <li><a href="https://huggingface.co/" target="_blank">HuggingFace</a></li>
-                <li><a href="https://claude.ai/" target="_blank">Claude</a></li>
-            </ul>
+    st.markdown("<h2>DeltaX Data Professor Credentials</h2>", unsafe_allow_html=True)
+    st.markdown("<p>Before you get started, kindly get your API Keys from any of the following providers:</p>",unsafe_allow_html=True)
+    for provider in PROVIDERS:
+        st.markdown(f"""
+        <div class="container mt-4">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="api-container">
+                        <a href="{PROVIDERS[provider]['url']}" target="_blank" class="btn btn-primary w-100">{provider}</a>
+                    </div>
+                </div>
+            </div>
         </div>
-        <br>
         """, unsafe_allow_html=True)
-
-
-
-        # Main function to get credentials
-
-
-
     # Main app layout
-    cols = st.columns(3)
+    cols = st.columns([4.6,2,4])
     with cols[1]:
-        sign_in = st.button("Sign In", key="sign_in")
+        sign_in = st.button("Get Started", key="get-started")
         if sign_in:
-            
+
             get_credentials()
-        
+
+
 # if __name__ == "__main__":
 credentials_page()

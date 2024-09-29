@@ -45,6 +45,7 @@ def load_css(file_name):
 
 load_css("style.css")
 load_css("home.css")
+load_css("credentials.css")
 # Page setup
 home_page=st.Page(
     title="Home",
