@@ -1,8 +1,7 @@
 import streamlit as st
 
 def home_page():
-    st.title("Home")
-    st.write("This is the home page.")
+    st.html("templates/home.html")
     
-if __name__ == "__main__":
-    home_page()
+    
+home_page()

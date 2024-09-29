@@ -1,0 +1,116 @@
+
+/* home */
+.st-emotion-cache-ubko3j.e1nzilvr4{
+    display: none;
+    
+}
+
+/* Styling for the h1 (DeltaX) */
+/* Styling for the h1 (DeltaX) */
+h1 {
+    font-size: 4rem;
+    font-weight: bold;
+    background: linear-gradient(to right, rgb(255, 124, 9), orange, yellow, green, rgb(254, 254, 2), rgb(183, 255, 0), violet);
+    -webkit-background-clip: text;
+    color: transparent;
+    animation: fadeIn 2s ease-in-out, slideIn 2s ease-in-out; /* Combined animations */
+    display: block;
+    opacity: 0; /* Initially hidden for fade-in */
+    animation-fill-mode: forwards; /* Ensures it stays visible after the animation */
+}
+
+/* Styling for the h6 (The Data Professor) */
+h6 {
+    font-size: 1rem;
+    font-weight: 400;
+    background: linear-gradient(to right, rgb(255, 255, 255), rgb(12, 255, 3), yellow, green, rgb(19, 255, 251), rgb(205, 26, 249), violet);
+    -webkit-background-clip:text;
+    color: transparent;
+    animation: fadeIn 2.5s ease-in-out, slideIn 2.5s ease-in-out; /* Combined animations */
+    margin-top: -30px; /* Reduced gap between h1 and h4 */
+    padding-left: 62px;
+    opacity: 0; /* Initially hidden for fade-in */
+    animation-fill-mode: forwards; /* Ensures it stays visible after the animation */
+}
+
+/* Fade in effect */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Slide in effect */
+@keyframes slideIn {
+    0% {
+        transform: translateX(-50px); /* Slide from the left */
+    }
+    100% {
+        transform: translateX(0); /* Move to original position */
+    }
+}
+
+/* Rainbow color animation */
+@keyframes rainbow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Reverse rainbow color animation for h4 */
+@keyframes rainbow-reverse {
+    0% { background-position: 100% 50%; }
+    50% { background-position: 0% 50%; }
+    100% { background-position: 100% 50%; }
+}
+
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* Centers the cards horizontally */
+    padding: 20px;
+    background-color: rgb(18, 14, 25);
+    align-items: center; /* Centers the cards vertically (if necessary) */
+}
+
+.card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 15px;
+    padding: 20px;
+    width: 300px; /* Adjust as necessary */
+    text-align:center   ;
+    transition: transform 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    border: brown 1px solid;
+    border-radius: 10px;
+}
+
+.card h4 {
+    margin-top: -100px;
+    color: #2980b9;
+}
+
+.card p {
+    color: #777;
+}
+
+.lottie-animation {
+    width: 80px; /* Adjust size as needed */
+    height: 80px; /* Adjust size as needed */
+    margin: 0 auto 10px;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #2c3e50;
+    color: white;
+}
+
+
+

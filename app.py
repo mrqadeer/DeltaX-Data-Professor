@@ -1,3 +1,5 @@
+import os
+import pathlib
 import streamlit as st
 
 
@@ -22,11 +24,27 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-def load_css():
-    with open("static/css/style.css") as f:
-        st.markdown('<style>{}</style>'.format(f.read()), unsafe_allow_html=True)
+def load_css(file_name):
+    """Load a CSS file and inject it into the Streamlit app.
 
-load_css()
+    Parameters
+    ----------
+    file_name : str
+        The path to the CSS file to load.
+
+    Returns
+    -------
+    None
+    """
+    # Ensure it works no matter where it's called from
+    file_path = os.path.join(os.path.dirname(__file__), 'static/css', file_name)
+    file_path = pathlib.Path(file_path)
+    with open(file_path) as f:
+        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+
+
+load_css("style.css")
+load_css("home.css")
 # Page setup
 home_page=st.Page(
     title="Home",
