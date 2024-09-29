@@ -1,0 +1,11 @@
+h3{
+    font-size: 1.5rem;
+    font-weight: bold;
+    background: linear-gradient(to right, rgb(255, 124, 9), orange, yellow, green, rgb(254, 254, 2), rgb(183, 255, 0), violet);
+    -webkit-background-clip:text;
+    color: transparent;
+    animation: fadeIn 2s ease-in-out, slideIn 2s ease-in-out; /* Combined animations */
+    display: block;
+    opacity: 0; /* Initially hidden for fade-in */
+    animation-fill-mode: forwards; /* Ensures it stays visible after the animation */
+}
