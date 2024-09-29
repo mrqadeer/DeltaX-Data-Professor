@@ -26,9 +26,10 @@ GROQ_MODELS=['llama-3.1-70b-versatile', 'llama-3.2-1b-preview',
 ANTROPIC_MODELS=['claude-3-5-sonnet-20240620','claude-3-sonnet-20240229','claude-3-opus-20240229','claude-3-haiku-20240307']
 
 PROVIDERS= {
-        "PandasAI": {"key":"PANDASAI_API_KEY","PandasAI":PANDASAI_MODELS},
-        "OpenAI": {"key":"OPENAI_API_KEY","OpenAI":OPENAI_MODELS},
-        "Google Gemini": {"key":"GOOGLE_API_KEY","Google Gemini":GOOGLE_MODLES},
-        "Groq": {"key":"GROQ_API_KEY","Groq":GROQ_MODELS},
-        "Antropic": {"key":"ANTROPIC_API_KEY","Antropic":ANTROPIC_MODELS}
+        "PandasAI": {"key":"PANDASAI_API_KEY","PandasAI":PANDASAI_MODELS,"url":"https://www.pandabi.ai/admin/api-keys"},
+        "OpenAI": {"key":"OPENAI_API_KEY","OpenAI":OPENAI_MODELS,"url":"https://platform.openai.com/api-keys"},
+        "Google Gemini": {"key":"GOOGLE_API_KEY","Google Gemini":GOOGLE_MODLES,"url":"https://aistudio.google.com/app/apikey"},
+        "Groq": {"key":"GROQ_API_KEY","Groq":GROQ_MODELS,"url":"https://console.groq.com/keys"},
+        "Antropic": {"key":"ANTROPIC_API_KEY","Antropic":ANTROPIC_MODELS,"url":"https://console.anthropic.com/settings/keys"}
     }
+
