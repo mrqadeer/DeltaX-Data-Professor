@@ -15,7 +15,12 @@ if 'api_key' not in st.session_state:
 if 'signed_in' not in st.session_state:
     st.session_state['signed_in'] = False
 
-    
+if 'dfs' not in st.session_state:
+    st.session_state['dfs'] = []
+# Persist the selected sheets in session_state
+if 'selected_sheets' not in st.session_state:
+    st.session_state['selected_sheets'] = None
+
 
 st.set_page_config(
     page_title="DeltaX Data Professor",

@@ -9,3 +9,9 @@ h3{
     opacity: 0; /* Initially hidden for fade-in */
     animation-fill-mode: forwards; /* Ensures it stays visible after the animation */
 }
+.choice{
+    color: #ffe814;
+    font-size: 16px;
+    text-align: center;
+    margin-bottom: 15px;
+}

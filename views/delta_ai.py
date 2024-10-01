@@ -1,5 +1,7 @@
 import streamlit as st
-from components.display_components import display_welcome_message
+from components.display_components import display_welcome_message,display_dataframes
+from components.input_components import get_data_source
+from src.hanlders.files_handlers import handle_uploaded_files
 def show_sign_in_button() -> None:
     """
     Display the sign-in button and redirect users to the login page when clicked.
@@ -30,5 +32,19 @@ def delta_ai_page() -> None:
         # Welcome the user if they are signed in
         username = st.session_state.get('username', 'User')
         display_welcome_message(username)
-
+        st.divider()
+        with st.expander("Data Source", expanded=True):
+            data_source,tag =get_data_source()
+            submit = st.button("Submit")
+        if submit:
+            with st.expander("Data", expanded=False):    
+                if tag=="uploaded_files" and data_source is not None:
+                    with st.spinner("Processing..."):
+                        dfs=handle_uploaded_files(data_source)
+                        display_dataframes(dfs)
+  
+                elif tag=="selected_db":
+                    st.write(data_source)
+        else:
+            pass
 delta_ai_page()
