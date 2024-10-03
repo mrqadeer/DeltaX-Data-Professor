@@ -20,7 +20,23 @@ if 'dfs' not in st.session_state:
 # Persist the selected sheets in session_state
 if 'selected_sheets' not in st.session_state:
     st.session_state['selected_sheets'] = None
+if 'db_choice' not in st.session_state:
+    st.session_state['db_choice'] = ''
+if 'host' not in st.session_state:
+    st.session_state['host']='localhost'
+if 'port' not in st.session_state:
+    st.session_state['port']=3306
+if 'user' not in st.session_state:
+    st.session_state['user']='root'
+if 'password' not in st.session_state:
+    st.session_state['password']=None
+if 'database' not in st.session_state:
+    st.session_state['database']=None
+if 'table' not in st.session_state:
+    st.session_state['table']=None
 
+if 'connect' not in st.session_state:
+    st.session_state['connect']=False
 
 st.set_page_config(
     page_title="DeltaX Data Professor",

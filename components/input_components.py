@@ -3,7 +3,7 @@ import time
 import streamlit as st
 from utils.contsant import PROVIDERS
 from utils.get_models import get_provider
-from typing import List, Tuple, Union, Optional,Any
+from typing import List, Tuple, Union, Optional,Any,Dict
 
 # Define type aliases for clarity
 UploadedFiles = Optional[List]
@@ -86,21 +86,146 @@ def get_database_choice() -> SelectedDatabase:
     db_choice = st.selectbox("Select Database", 
                               ["MySQL", "SQLite", "PostgreSQL", 
                                "Snowflake", "Databricks", 
-                               "Airtable", "GoogleBigQuery", 
-                               "Yahoo Finance"])
+                               "Airtable", "GoogleBigQuery"])
+    
     return db_choice
 
-def get_data_source() -> Tuple[Union[UploadedFiles, SelectedDatabase], str]:
-    """Get data source choice from the user."""
-    data_source = st.selectbox("Select an option:", ["Upload File", "Connect to Database"], index=0)
 
-    if data_source == "Upload File":
+def get_databases_credentials(db_choice: str) -> Tuple[str, str]:
+    """Get the database credentials from the user."""
+    match db_choice:
+        case "MySQL":
+            return get_mysql_credentials()
+        case "SQLite":
+            return get_sqlite_credentials()
+        case "PostgreSQL":
+            return get_postgresql_credentials()
+        case "Snowflake":
+            return get_snowflake_credentials()
+        case "Databricks":
+            return get_databricks_credentials()
+        case "Airtable":
+            return get_airtable_credentials()
+        case "GoogleBigQuery":
+            return get_google_bigquery_credentials()
+        case _:
+            return None, None
+    
+
+def get_mysql_credentials() -> Dict:
+    """Get MySQL credentials from the user."""
+    cols = st.columns(3, gap="small",vertical_alignment="center")
+    with cols[0]:
+        host = st.text_input("Host", "localhost")
+    with cols[1]:
+        port = st.text_input("Port", "3306")
+    with cols[2]: 
+        user = st.text_input("User")
+    cols = st.columns(3, gap="small",vertical_alignment="center")
+    with cols[0]:
+        password = st.text_input("Password")
+    with cols[1]:
+        database = st.text_input("Database")
+    with cols[2]:
+        table = st.text_input("Table")
+    return {"MySQL": {"host": host, "port": port, "username": user, "password": password, "database": database, "table": table}}
+    
+
+def get_sqlite_credentials() -> Dict:
+    """Get SQLite credentials from the user."""
+    database = st.text_input("Database")
+    table = st.text_input("Table")
+    return {"SQLite": {"database": database, "table": table}}
+def get_postgresql_credentials() -> Dict:
+    """Get PostgreSQL credentials from the user."""
+    cols = st.columns(3, gap="small",vertical_alignment="center")
+    with cols[0]:
+        host = st.text_input("Host", "localhost")
+    with cols[1]:
+        port = st.text_input("Port", "3306")
+    with cols[2]: 
+        user = st.text_input("User")
+    with cols[0]:
+        password = st.text_input("Password")
+    with cols[1]:
+        database = st.text_input("Database")
+    with cols[2]:
+        table = st.text_input("Table")
+
+    return {"PostgreSQL": {"host": host, "port": port, "user": user, "password": password, "database": database, "table": table}}
+    
+def get_snowflake_credentials() -> Dict:
+    """Get Snowflake credentials from the user."""
+    cols = st.columns(3, gap="small",vertical_alignment="center")
+    with cols[0]:
+        account = st.text_input("Account","ehxzojy-ue47135")
+    with cols[1]:
+        database = st.text_input("Database","SNOWFLAKE_SAMPLE_DATA")
+    with cols[2]:
+        username = st.text_input("Username","test")
+
+    with cols[0]:
+        password = st.text_input("Password","*****")
+    with cols[1]:
+        table = st.text_input("Table","lineitem")
+    with cols[2]:
+        warehouse = st.text_input("Warehouse","COMPUTE_WH")
+    dbSchema = st.text_input("Database Schema","tpch_sf1")
+    return {"Snowflake": {"account": account, "database": database, "username": username, "password": password, "table": table, "warehouse": warehouse, "dbSchema": dbSchema}}
+    
+    
+def get_databricks_credentials() -> Dict:
+    """Get Databricks credentials from the user."""
+    cols = st.columns(3, gap="small",vertical_alignment="center")
+    with cols[0]:
+        host = st.text_input("Host", "adb-*****.azuredatabricks.net")
+    with cols[1]:
+        database = st.text_input("Database", "default")
+    with cols[2]:
+        token= st.text_input("Token", "dapidfd412321")
+
+    with cols[0]:
+        port = st.text_input("Port", "443")
+    with cols[1]:
+        table = st.text_input("Table", "loan_payments_data")
+    with cols[2]:
+        httpPath = st.text_input("HTTP Path", "/sql/1.0/warehouses/213421312")
+    return {"Databricks": {"host": host, "database": database, "token": token, "port": port, "table": table, "httpPath": httpPath}}
+    
+def get_airtable_credentials() -> Dict:
+    """Get Airtable credentials from the user."""
+    
+    base_id = st.text_input("Base ID")
+    table_name = st.text_input("Table Name")
+    api_key = st.text_input("API Key")
+
+    return {"Airtable": {"base_id": base_id, "table_name": table_name, "api_key": api_key}}
+
+def get_google_bigquery_credentials() -> Dict:
+    """Get Google BigQuery credentials from the user."""
+   
+    cols=st.columns(2, gap="small",vertical_alignment="center")
+    with cols[0]:
+        credentials_path = st.text_input("Credentials Path", "path to keyfile.json")
+    with cols[1]:
+        database = st.text_input("Database", "dataset_name")
+    with cols[0]:
+        table = st.text_input("Table", "table_name")
+    with cols[1]:
+        projectID = st.text_input("Project ID", "Project_id_name")
+
+    return {"Google BigQuery": {"credentials_path": credentials_path, "database": database, "table": table, "projectID": projectID}}
+   
+
+def get_data_source(source:str) -> str:
+    """Get data source choice from the user."""
+    # data_source = st.selectbox("Select an option:", ["Upload File", "Connect to Database"], index=0)
+    if source=='file':
         file_choice = st.selectbox("Select file type", ["CSV", "TSV", "XLSX"])
         uploaded_files = get_uploaded_files(file_choice)
-        return uploaded_files, "uploaded_files"
-
-    elif data_source == "Connect to Database":
+        return uploaded_files
+    else:
         db_choice = get_database_choice()
-        return db_choice, "selected_db"
+        st.session_state["db_choice"] = db_choice
 
-    return None, ""
+        return db_choice

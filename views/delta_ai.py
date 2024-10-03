@@ -1,7 +1,9 @@
 import streamlit as st
 from components.display_components import display_welcome_message,display_dataframes
-from components.input_components import get_data_source
+from components.input_components import get_data_source,get_databases_credentials
 from src.hanlders.files_handlers import handle_uploaded_files
+from src.hanlders.database_hanlders import MySQLConnector,PostgresConnector
+from pandasai.connectors import SqliteConnector
 def show_sign_in_button() -> None:
     """
     Display the sign-in button and redirect users to the login page when clicked.
@@ -33,18 +35,40 @@ def delta_ai_page() -> None:
         username = st.session_state.get('username', 'User')
         display_welcome_message(username)
         st.divider()
+        
         with st.expander("Data Source", expanded=True):
-            data_source,tag =get_data_source()
-            submit = st.button("Submit")
-        if submit:
-            with st.expander("Data", expanded=False):    
-                if tag=="uploaded_files" and data_source is not None:
+            cols=st.columns(2)
+            
+            with cols[0]:
+                
+                uploaded_files =get_data_source(source='file')
+                submit = st.button("Submit", key="submit")
+                
+                if submit:        
                     with st.spinner("Processing..."):
-                        dfs=handle_uploaded_files(data_source)
+                        dfs=handle_uploaded_files(uploaded_files)
                         display_dataframes(dfs)
-  
-                elif tag=="selected_db":
-                    st.write(data_source)
-        else:
-            pass
+            with cols[1]:
+                
+                db_choice = get_data_source(source='database')
+                credentials=get_databases_credentials(db_choice)
+                connect=st.button("Connect", key="connect")
+                if connect:
+                    with st.spinner("Processing..."):
+                        for db in credentials:
+                            match db:
+                                case 'MySQL':
+                                    connector = MySQLConnector(**credentials[db])
+                                    connector.connect()
+                                    st.success("Connected to MySQL")
+                                case 'SQLite':
+                                    connector = SqliteConnector(config=credentials[db])
+                                    st.success("Connected to SQLite")
+                                case 'PostgreSQL':
+                                    connector = PostgresConnector(**credentials[db])
+                                    connector.connect()
+                                    st.success("Connected to PostgressSQL")
+                                case _:
+                                    st.error("Database not supported")
+
 delta_ai_page()
