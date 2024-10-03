@@ -123,7 +123,7 @@ def get_mysql_credentials() -> Dict:
         user = st.text_input("User")
     cols = st.columns(3, gap="small",vertical_alignment="center")
     with cols[0]:
-        password = st.text_input("Password")
+        password = st.text_input("Password", type="password")
     with cols[1]:
         database = st.text_input("Database")
     with cols[2]:
@@ -146,7 +146,7 @@ def get_postgresql_credentials() -> Dict:
     with cols[2]: 
         user = st.text_input("User")
     with cols[0]:
-        password = st.text_input("Password")
+        password = st.text_input("Password", type="password")
     with cols[1]:
         database = st.text_input("Database")
     with cols[2]:
@@ -165,7 +165,7 @@ def get_snowflake_credentials() -> Dict:
         username = st.text_input("Username","test")
 
     with cols[0]:
-        password = st.text_input("Password","*****")
+        password = st.text_input("Password","*****", type="password")
     with cols[1]:
         table = st.text_input("Table","lineitem")
     with cols[2]:
@@ -182,7 +182,7 @@ def get_databricks_credentials() -> Dict:
     with cols[1]:
         database = st.text_input("Database", "default")
     with cols[2]:
-        token= st.text_input("Token", "dapidfd412321")
+        token= st.text_input("Token", "dapidfd412321", type="password")
 
     with cols[0]:
         port = st.text_input("Port", "443")
@@ -212,7 +212,7 @@ def get_google_bigquery_credentials() -> Dict:
     with cols[0]:
         table = st.text_input("Table", "table_name")
     with cols[1]:
-        projectID = st.text_input("Project ID", "Project_id_name")
+        projectID = st.text_input("Project ID", "Project_id_name", type="password")
 
     return {"Google BigQuery": {"credentials_path": credentials_path, "database": database, "table": table, "projectID": projectID}}
    
