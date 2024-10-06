@@ -27,7 +27,7 @@ class CSVFileHandler(BaseFileHandler):
             try:
                 df = pd.read_csv(file)
                 all_dfs.append(df)
-                st.session_state['dfs'] = all_dfs  # Store DataFrames in session state
+                st.session_state['data_frames'] = all_dfs  # Store DataFrames in session state
             except ValueError as e:
                 st.error(f"Error reading CSV file '{file.name}': {e}")
             except Exception as e:
@@ -47,7 +47,7 @@ class TSVFileHandler(BaseFileHandler):
             try:
                 df = pd.read_csv(file, sep='\t')
                 all_dfs.append(df)
-                st.session_state['dfs'] = all_dfs # Store DataFrames in session state
+                st.session_state['data_frames'] = all_dfs # Store DataFrames in session state
             except ValueError as e:
                 st.error(f"Error reading CSV file '{file.name}': {e}")
             except Exception as e:
@@ -86,7 +86,7 @@ class ExcelFileHandler(BaseFileHandler):
                 all_dfs.append(df)
 
             # Store the DataFrames in session state
-            st.session_state['dfs'] = all_dfs
+            st.session_state['data_frames'] = all_dfs
 
         except Exception as e:
             st.error(f"Error reading Excel file '{file.name}': {e}")
@@ -120,14 +120,10 @@ def handle_uploaded_files(uploaded_files: Union[List[Any], Any]) -> List[pd.Data
         elif uploaded_files is not None:
             # Process the single file
             dfs = handle_file(uploaded_files)
-            
-        else:
-            st.warning("No file uploaded.")
-        
     except Exception as e:
         st.error(f"An error occurred while processing the files: {e}")
-    st.session_state['dfs'] = dfs
-    return st.session_state['dfs']
+    
+    return dfs
 
 
 def handle_file(file: Any) -> List[pd.DataFrame]:

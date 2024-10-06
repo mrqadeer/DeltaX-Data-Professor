@@ -1,8 +1,8 @@
+import streamlit as st
 from typing import Optional, List, Dict, Any
 
 from pandasai.connectors import SQLConnector
-
-
+from pandasai.connectors import SqliteConnector
 class DatabaseConnector(SQLConnector):
     """
     Base class for handling database connections using PandasAI SQLConnector.
@@ -69,11 +69,12 @@ class DatabaseConnector(SQLConnector):
         """
         try:
             # Attempt to create a connection using the inherited functionality
-            return super().__init__(config=self.get_config())
+            super().__init__(config=self.get_config())
+            return self
         except Exception as e:
             # Log the exception and raise it for further handling
-            print(f"Failed to establish a connection: {e}")
-            raise
+            st.error(f"Failed to establish a connection: {e}")
+            st.stop()
 
 
         
@@ -145,45 +146,40 @@ class PostgresConnector(DatabaseConnector):
         """
         super().__init__(host, port, database, username, password, table, where=where)
 
+def handle_database_connection(credentials: Dict) -> Any:
+    """
+    Handles the database connection based on the credentials provided.
 
-# Example usage
-if __name__ == "__main__":
-    # Example for SQLite connection
-    # try:
-    #     sqlite_connector = SQLiteConnector(database="my_sqlite_db", table="loans", where=[
-    #                                        ["loan_status", "=", "PAIDOFF"]])
-    #     sqlite_connector.connect()
-    #     print("SQLite connection established successfully.")
-    # except Exception as e:
-    #     print(f"Error in SQLite connection: {e}")
-
-    # Example for MySQL connection
-    try:
-        mysql_connector = MySQLConnector(
-            host="localhost",
-            port=3307,
-            database="newdb",
-            username="root",
-            password="hitmath1122$",
-            table="mobiles"
-        )
-        mysql_connector.connect()
-        print("MySQL connection established successfully.")
-    except Exception as e:
-        print(f"Error in MySQL connection: {e}")
-
-        # # Example for PostgreSQL connection
-        # try:
-        #     postgres_connector = PostgresConnector(
-        #         host="localhost",
-        #         port=5432,
-        #         database="my_postgres_db",
-        #         username="postgres_user",
-        #         password="postgres_password",
-        #         table="my_table",
-        #         where=[["column_name", "=", "some_value"]]
-        #     )
-        #     postgres_connector.connect()
-        #     print("PostgreSQL connection established successfully.")
-        # except Exception as e:
-        #     print(f"Error in PostgreSQL connection: {e}")
+    Args:
+        credentials (Dict): A dictionary containing the database credentials.
+    """
+    # Implement the logic to handle the database connection based on the credentials
+    for db in credentials:
+        match db:
+            case 'MySQL':
+                try:
+                    connector = MySQLConnector(**credentials[db]).connect()
+                    st.success("Connected to MySQL")
+                    
+                except Exception as e:
+                    st.error(e)
+                    st.stop()
+            case 'SQLite':
+                try:
+                    connector = SqliteConnector(config=credentials[db])
+                    st.success("Connected to SQLite")
+                except Exception as e:
+                    st.error(e)
+                    st.stop()
+            case 'PostgreSQL':
+                try:
+                    
+                    connector = PostgresConnector(**credentials[db]).connect()
+                    st.success("Connected to Postgress")
+                except Exception as e:
+                    st.error(e)
+                    st.stop()
+            case _:
+                st.error("Database not supported")
+    st.session_state['is_connected'] = True
+    return connector

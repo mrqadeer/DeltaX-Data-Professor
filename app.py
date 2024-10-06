@@ -4,39 +4,39 @@ import streamlit as st
 
 
 # Initialize session states for credentials
-if 'provider_choice' not in st.session_state:
-    st.session_state['provider_choice'] = None
+if 'provider' not in st.session_state:
+    st.session_state['provider'] = None
 if 'llm_choice' not in st.session_state:
     st.session_state['llm_choice'] = None
 if 'username' not in st.session_state:
     st.session_state['username'] = 'Qadeer'
+if 'credentials' not in st.session_state:
+    st.session_state['credentials'] = {}
 if 'api_key' not in st.session_state:
     st.session_state['api_key'] = None
 if 'signed_in' not in st.session_state:
     st.session_state['signed_in'] = False
 
-if 'dfs' not in st.session_state:
-    st.session_state['dfs'] = []
+if 'data_frames' not in st.session_state:
+    st.session_state['data_frames'] = []
 # Persist the selected sheets in session_state
 if 'selected_sheets' not in st.session_state:
     st.session_state['selected_sheets'] = None
 if 'db_choice' not in st.session_state:
     st.session_state['db_choice'] = ''
-if 'host' not in st.session_state:
-    st.session_state['host']='localhost'
-if 'port' not in st.session_state:
-    st.session_state['port']=3306
-if 'user' not in st.session_state:
-    st.session_state['user']='root'
-if 'password' not in st.session_state:
-    st.session_state['password']=None
-if 'database' not in st.session_state:
-    st.session_state['database']=None
-if 'table' not in st.session_state:
-    st.session_state['table']=None
 
-if 'connect' not in st.session_state:
-    st.session_state['connect']=False
+
+if 'is_uploaded' not in st.session_state:
+    st.session_state['is_uploaded'] = False
+if 'is_connected' not in st.session_state:
+    st.session_state['is_connected']=False
+
+    
+if 'process' not in st.session_state:
+    st.session_state['process'] = False
+
+if 'all_done' not in st.session_state:
+    st.session_state['all_done'] = False
 
 st.set_page_config(
     page_title="DeltaX Data Professor",
