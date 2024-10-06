@@ -87,6 +87,7 @@ def delta_ai_page() -> None:
 
         prompt=st.chat_input("Ask a question about the data")
         if prompt:
+            st.info(f"Question: {prompt}")
             with st.spinner("Generating response..."):
                 agent=chatbot_handler(dfs=st.session_state['dfs'],query=prompt)
                 display_results(agent)

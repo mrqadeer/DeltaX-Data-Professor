@@ -42,8 +42,8 @@ def display_results(agent: Agent) -> None:
     code=agent.last_code_executed
     
     if result is not None:
-        cols=st.columns(2,gap='small',vertical_alignment='center')
-        with cols[0]:
+        
+        with st.expander("Result",expanded=True):
             if result['type'] == 'string':
                 st.info(result['value'])
             elif result['type'] == 'dataframe':
@@ -52,11 +52,12 @@ def display_results(agent: Agent) -> None:
                 st.image(result['value'], use_column_width=True)
             elif result['type'] == 'number':
                 st.info(result['value'])
-        with cols[1]:
-            with st.expander("Code",expanded=True):
-                if code is not None:
-                    st.code(code,language='python')
+        st.divider()
         with st.expander("Explanation",expanded=True):
             st.markdown(agent.explain())
+        st.divider()
+        with st.expander("Code",expanded=True):
+            if code is not None:
+                st.code(code,language='python')
     else:
         st.error('We are unable to retrieve any result. Please check your question and try again.')
