@@ -1,18 +1,14 @@
 import streamlit as st
-from components.display_components import display_welcome_message, display_dataframes,display_results
+from components.display_components import (display_welcome_message, 
+                                           display_dataframes
+                                           ,display_results,
+                                           display_sign_in_button)
 from components.input_components import get_uploaded_files, get_database, get_database_credentials
 from src.hanlders.files_handlers import handle_uploaded_files
 from src.hanlders.database_hanlders import handle_database_connection
 from src.hanlders.chatbot_handlers import chatbot_handler
-def show_sign_in_button() -> None:
-    """
-    Display the sign-in button and redirect users to the login page when clicked.
-    """
-    cols = st.columns([3.5, 2, 2])
 
-    with cols[1]:
-        if st.button("Sign In"):
-            st.switch_page("views/credentials.py")
+
 
 
 def delta_ai_page() -> None:
@@ -23,7 +19,7 @@ def delta_ai_page() -> None:
     if not st.session_state.get('signed_in', False):
         st.error("Please sign in to get in touch with DeltaX Data Professor.")
         st.markdown("""Click on the "Sign In" button to get started.""")
-        show_sign_in_button()
+        display_sign_in_button()
         return
 
     # Welcome the user if they are signed in
