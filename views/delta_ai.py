@@ -1,12 +1,18 @@
 import streamlit as st
+
 from components.display_components import (display_welcome_message, 
-                                           display_dataframes
-                                           ,display_results,
+                                           display_dataframes,
+                                           display_results,
                                            display_sign_in_button)
-from components.input_components import get_uploaded_files, get_database, get_database_credentials
+from components.input_components import (get_uploaded_files, 
+                                         get_database,
+                                         get_database_credentials,
+                                         get_recording,get_groq_api_key)
+
 from src.hanlders.files_handlers import handle_uploaded_files
 from src.hanlders.database_hanlders import handle_database_connection
 from src.hanlders.chatbot_handlers import chatbot_handler
+from src.hanlders.transcription import transcribe_audio
 
 
 
@@ -36,6 +42,10 @@ def delta_ai_page() -> None:
         st.session_state['process'] = False
     if 'dfs' not in st.session_state:
         st.session_state['dfs'] = None
+    if 'voice' not in st.session_state:
+        st.session_state['voice'] = False
+    if 'is_key' not in st.session_state:
+        st.session_state['is_key'] = False
 
     # Initialize local variables to None
     uploaded_files = None
@@ -80,13 +90,41 @@ def delta_ai_page() -> None:
     if st.session_state['dfs'] is not None:
         with st.expander("Data Preview"):
             display_dataframes(st.session_state['dfs'])
+        
+        cols = st.columns([2, 2, 6], gap="small")
+        # st.session_state.clear()
+        with cols[0]:
+            voice_query = st.toggle("Voice Query", key="voice_query")
+            
+            if voice_query or st.session_state.get('voice', False):
+                
+                st.session_state['voice'] = True
+                
+                # Check if the API key is not already set
+                if st.session_state.get('groq_api_key') is None:
+                    get_groq_api_key()  # Only open the dialog if the key is not already set
+        prompt=None          
+        if st.session_state['is_key']: 
+            with cols[1]:
+                audio_bytes = get_recording()
+                if audio_bytes is not None:
+                    audio_prompt=transcribe_audio(audio_bytes)
+                    if audio_prompt:
+                        prompt=audio_prompt
+                    
+        
+        with cols[2]:
+            text_prompt = st.chat_input("Ask a question about the data")
+        
+            if text_prompt:
+                prompt=text_prompt
 
-        prompt=st.chat_input("Ask a question about the data")
         if prompt:
             st.info(f"Question: {prompt}")
             with st.spinner("Generating response..."):
-                agent=chatbot_handler(dfs=st.session_state['dfs'],query=prompt)
+                agent = chatbot_handler(dfs=st.session_state['dfs'], query=prompt)
                 display_results(agent)
+
 
 # Calling the function to display the page
 delta_ai_page()
