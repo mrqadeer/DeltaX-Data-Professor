@@ -68,7 +68,6 @@ h6 {
     flex-wrap: wrap;
     justify-content: center; /* Centers the cards horizontally */
     padding: 20px;
-    background-color: rgb(18, 14, 25);
     align-items: center; /* Centers the cards vertically (if necessary) */
 }
 
