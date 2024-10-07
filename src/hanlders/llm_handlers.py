@@ -6,7 +6,18 @@ from langchain_anthropic import ChatAnthropic
 from typing import Union
 
 def llm_handler(credentials:dict) -> Union[ChatGroq, ChatOpenAI, GoogleGemini, BambooLLM, ChatAnthropic]:
-    """Get the LLM handler from the environment."""
+    """
+    Returns an instance of a Langchain LLM based on the provider.
+
+    Parameters:
+        credentials (dict): A dictionary containing the credentials for the LLM provider.
+
+    Returns:
+        Union[ChatGroq, ChatOpenAI, GoogleGemini, BambooLLM, ChatAnthropic]: An instance of the LLM provider.
+
+    Raises:
+        ValueError: If no LLM provider is found in the environment.
+    """
     for provider in credentials:
         if provider == "Groq":
             

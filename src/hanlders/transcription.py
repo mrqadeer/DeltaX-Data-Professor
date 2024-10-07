@@ -4,6 +4,24 @@ import streamlit as st
 from groq import Groq
 import groq
 def transcribe_audio(audio_bytes, model="whisper-large-v3"):
+    
+    """
+    Sends audio bytes to Groq for transcription.
+
+    Args:
+        audio_bytes (bytes): Raw audio bytes to be transcribed
+        model (str, optional): Model to use for transcription. Defaults to "whisper-large-v3"
+
+    Returns:
+        str: Transcription of the audio
+
+    Raises:
+        groq.AuthenticationError: If Groq API key authentication fails
+        groq.APIConnectionError: If Groq API connection fails
+        groq.APIStatusError: If Groq API returns an error status
+        groq.APIError: If Groq API returns an error response
+        Exception: If any other error occurs
+    """
     # Convert audio bytes to a file-like object using io.BytesIO
     try:
         client = Groq(api_key=st.session_state.groq_api_key)
@@ -15,7 +33,7 @@ def transcribe_audio(audio_bytes, model="whisper-large-v3"):
             file=("recorded_audio.wav", audio_file.read()),  # Pass the audio file as expected by the API
             model=model,  # Model to use for transcription
             response_format="json",  # Get response in JSON format
-            temperature=0.0  # Optional, adjust the temperature for creative responses if needed
+            temperature=0.3  # Optional, adjust the temperature for creative responses if needed
         )
 
         # Return the transcription text
