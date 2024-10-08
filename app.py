@@ -40,12 +40,12 @@ if 'all_done' not in st.session_state:
 
 st.set_page_config(
     page_title="DeltaX Data Professor",
-    page_icon=":robot:",
+    page_icon=":chart:",
     layout="wide",
     initial_sidebar_state="expanded",
 )
 
-def load_css(file_name):
+def load_css(file_name:str):
     """Load a CSS file and inject it into the Streamlit app.
 
     Parameters
