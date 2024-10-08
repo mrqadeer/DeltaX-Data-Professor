@@ -250,7 +250,7 @@ def get_postgresql_credentials() -> Dict:
 
 
 @st.dialog("Groq API Key For Voice Assistant")
-def get_groq_api_key():
+def get_groq_api_key()->None:
     """
     Presents the user with a text input field to enter their Groq API key.
 
@@ -264,21 +264,25 @@ def get_groq_api_key():
         None
 
     Returns:
-        str: The Groq API key entered by the user, or None if the user did not enter a valid API key.
+        None
     """
     if 'groq_api_key' not in st.session_state:
         st.session_state['groq_api_key'] = None  # Start with None to track if key has been set
-
+    
     if st.session_state['groq_api_key'] is None:
+        st.markdown("<span>For Voice input you have to give a Groq API key</span>", unsafe_allow_html=True)
         groq_api_key = st.text_input("Enter your Groq API key", type="password")
+        
+        st.markdown(f"<span style='color: yellow;'>Get {PROVIDERS['Groq']['key']}&nbsp;</span><a href='{PROVIDERS['Groq']['url']}' target='_blank'>here</a>", unsafe_allow_html=True)
+        
         submit = st.button("Submit")
-
         if submit:
+            
             st.session_state['groq_api_key'] = groq_api_key
-            st.session_state['is_key'] = True
+            
             st.success("Thanks for providing your Groq API key!.Close the dialog to continue")
-    return st.session_state.get('groq_api_key', None)
-
+            
+       
 def get_recording()-> bytes:
     """
     Record audio from the user's microphone and return the recorded audio as a bytes object.

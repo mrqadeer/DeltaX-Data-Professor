@@ -103,6 +103,8 @@ def delta_ai_page() -> None:
                 # Check if the API key is not already set
                 if st.session_state.get('groq_api_key') is None:
                     get_groq_api_key()  # Only open the dialog if the key is not already set
+                    st.session_state['is_key'] = True
+        
         prompt=None          
         if st.session_state['is_key']: 
             with cols[1]:
