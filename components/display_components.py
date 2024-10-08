@@ -1,5 +1,9 @@
 import streamlit as st
 from pandasai import Agent
+import os,pathlib
+PLOT_PATH=pathlib.Path(__file__).parent.parent.joinpath('exports/charts/temp_chart.png')
+print(PLOT_PATH)
+
 def display_welcome_message(username: str) -> None:
     """
     Display a welcome message for signed-in users.
@@ -36,11 +40,39 @@ def display_dataframes(dfs: list) -> None:
     for i, df in enumerate(dfs):
         st.info(f"Dataframe {i+1} with {df.shape[0]} rows and {df.shape[1]} columns")
         st.dataframe(df.head(), use_container_width=True)
-        
+  
 def display_results(agent: Agent) -> None:
+    """
+    Display the results of the agent's computation in Streamlit.
+
+    This function will automatically detect the type of result from the agent and display it
+    accordingly. If the result is a dataframe, it will be displayed as a table. If the result is a
+    plot, it will be displayed as an image. If the result is a string, it will be displayed as a
+    paragraph. If the result is a number, it will be displayed as a number.
+
+    The function will also display the code that was executed to generate the result and an
+    explanation of the code.
+
+    If the result is a plot, it will also be saved to a file and the user will be given the option
+    to download the plot as an image.
+
+    If the result is None, an error message will be displayed.
+
+    :param agent: The agent that generated the result
+    """
     result=agent.last_result
     code=agent.last_code_executed
-    
+    # Ensure result and code are stored in session state
+    if 'last_result' not in st.session_state:
+        st.session_state['last_result'] = result
+    if 'last_code_executed' not in st.session_state:
+        st.session_state['last_code_executed'] = code
+    if 'download' not in st.session_state:
+        st.session_state['download'] = False
+        
+    # Access the stored results and code if app re-runs
+    result = st.session_state.get('last_result', None)
+    code = st.session_state.get('last_code_executed', None)
     if result is not None:
         
         with st.expander("Result",expanded=True):
@@ -59,5 +91,13 @@ def display_results(agent: Agent) -> None:
         with st.expander("Code",expanded=True):
             if code is not None:
                 st.code(code,language='python')
+        if os.path.exists(PLOT_PATH):
+            st.divider()
+            with st.expander("Chart",expanded=True):
+                st.image(str(PLOT_PATH), use_column_width=True)
+            download_chart = st.download_button("Download Chart", str(PLOT_PATH), "chart.png", "image/png")
+            if download_chart or st.session_state['download']:
+                st.session_state['download'] = True
+                
     else:
         st.error('We are unable to retrieve any result. Please check your question and try again.')
