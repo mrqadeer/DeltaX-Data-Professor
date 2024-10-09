@@ -91,31 +91,19 @@ def delta_ai_page() -> None:
         with st.expander("Data Preview"):
             display_dataframes(st.session_state['dfs'])
         
-        cols = st.columns([2, 2, 6], gap="small")
-        # st.session_state.clear()
-        with cols[0]:
-            voice_query = st.toggle("Voice Query", key="voice_query")
-            
-            if voice_query or st.session_state.get('voice', False):
-                
-                st.session_state['voice'] = True
-                
-                # Check if the API key is not already set
-                if st.session_state.get('groq_api_key') is None:
-                    get_groq_api_key()  # Only open the dialog if the key is not already set
-                    st.session_state['is_key'] = True
+        cols = st.columns([2,8], gap="small")
         
         prompt=None          
-        if st.session_state['is_key']: 
-            with cols[1]:
-                audio_bytes = get_recording()
-                if audio_bytes is not None:
-                    audio_prompt=transcribe_audio(audio_bytes)
-                    if audio_prompt:
-                        prompt=audio_prompt
+       
+        with cols[0]:
+            audio_bytes = get_recording()
+            if audio_bytes is not None:
+                audio_prompt=transcribe_audio(audio_bytes)
+                if audio_prompt:
+                    prompt=audio_prompt
                     
         
-        with cols[2]:
+        with cols[1]:
             text_prompt = st.chat_input("Ask a question about the data")
         
             if text_prompt:

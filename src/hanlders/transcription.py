@@ -24,7 +24,7 @@ def transcribe_audio(audio_bytes, model="whisper-large-v3"):
     """
     # Convert audio bytes to a file-like object using io.BytesIO
     try:
-        client = Groq(api_key=st.session_state.groq_api_key)
+        client = Groq()
         audio_file = io.BytesIO(audio_bytes)
         audio_file.name = "recorded_audio.wav"  # Assign a name with the appropriate extension
 

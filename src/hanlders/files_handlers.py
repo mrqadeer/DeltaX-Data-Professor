@@ -82,7 +82,7 @@ class ExcelFileHandler(BaseFileHandler):
 
             # Read the selected sheets and append to all_dfs
             for sheet_name in selected_sheets:
-                df = pd.read_excel(xls, sheet_name=sheet_name)
+                df = pd.read_excel(xls, sheet_name=sheet_name,engine='openpyxl')
                 all_dfs.append(df)
 
             # Store the DataFrames in session state
