@@ -92,8 +92,11 @@ def display_results(agent: Agent) -> None:
             st.divider()
             with st.expander("Chart",expanded=True):
                 st.image(str(PLOT_PATH), use_column_width=True)
-            download_chart = st.download_button("Download Chart", str(PLOT_PATH), "chart.png", "image/png")
-            if download_chart or st.session_state['download']:
+             # Open the image file in binary mode
+            with open(PLOT_PATH, "rb") as image_file:
+                download_chart = st.download_button("Download Chart", image_file, "chart.png", "image/png")
+            
+            if download_chart or st.session_state.get('download', False):
                 st.session_state['download'] = True
                 
     else:
