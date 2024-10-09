@@ -1,5 +1,6 @@
 import streamlit as st
-
+import os
+import pathlib
 from components.display_components import (display_welcome_message, 
                                            display_dataframes,
                                            display_results,
@@ -121,6 +122,9 @@ def delta_ai_page() -> None:
 
             st.code(prompt,language="text",wrap_lines=True)
             with st.spinner("Generating response..."):
+                PLOT_PATH=pathlib.Path(__file__).parent.parent.joinpath('exports/charts/temp_chart.png')
+                if os.path.exists(PLOT_PATH):
+                    os.remove(PLOT_PATH)
                 agent = chatbot_handler(dfs=st.session_state['dfs'], query=prompt)
                 display_results(agent)
 

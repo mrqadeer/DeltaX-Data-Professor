@@ -1,10 +1,7 @@
 import streamlit as st
 from pandasai import Agent
 import os,pathlib
-PLOT_PATH=pathlib.Path(__file__).parent.parent.joinpath('exports/charts/temp_chart.png')
-if os.path.exists(PLOT_PATH):
-    st.write(PLOT_PATH)
-    os.remove(PLOT_PATH)
+
 
 def display_welcome_message(username: str) -> None:
     """
@@ -62,6 +59,7 @@ def display_results(agent: Agent) -> None:
 
     :param agent: The agent that generated the result
     """
+    PLOT_PATH=pathlib.Path(__file__).parent.parent.joinpath('exports/charts/temp_chart.png')
     # agent.clear_memory()
     result=agent.last_result
     code=agent.last_code_executed
