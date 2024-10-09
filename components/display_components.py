@@ -2,7 +2,9 @@ import streamlit as st
 from pandasai import Agent
 import os,pathlib
 PLOT_PATH=pathlib.Path(__file__).parent.parent.joinpath('exports/charts/temp_chart.png')
-print(PLOT_PATH)
+if os.path.exists(PLOT_PATH):
+    st.write(PLOT_PATH)
+    os.remove(PLOT_PATH)
 
 def display_welcome_message(username: str) -> None:
     """
@@ -60,37 +62,32 @@ def display_results(agent: Agent) -> None:
 
     :param agent: The agent that generated the result
     """
+    # agent.clear_memory()
     result=agent.last_result
     code=agent.last_code_executed
-    # Ensure result and code are stored in session state
-    if 'last_result' not in st.session_state:
-        st.session_state['last_result'] = result
-    if 'last_code_executed' not in st.session_state:
-        st.session_state['last_code_executed'] = code
+
     if 'download' not in st.session_state:
         st.session_state['download'] = False
-        
-    # Access the stored results and code if app re-runs
-    result = st.session_state.get('last_result', None)
-    code = st.session_state.get('last_code_executed', None)
     if result is not None:
         
         with st.expander("Result",expanded=True):
             if result['type'] == 'string':
-                st.info(result['value'])
+                # st.info(result['value'])
+                st.code(result['value'],language='text')
             elif result['type'] == 'dataframe':
                 st.dataframe(result['value'],use_container_width=True)
             elif result['type'] == 'plot':
                 st.image(result['value'], use_column_width=True)
             elif result['type'] == 'number':
-                st.info(result['value'])
+                st.code(result['value'],language='text')
+                # st.info(result['value'])
         st.divider()
         with st.expander("Explanation",expanded=True):
             st.markdown(agent.explain())
         st.divider()
         with st.expander("Code",expanded=True):
             if code is not None:
-                st.code(code,language='python')
+                st.code(code,language='python',line_numbers=True,wrap_lines=True)
         if os.path.exists(PLOT_PATH):
             st.divider()
             with st.expander("Chart",expanded=True):

@@ -122,7 +122,16 @@ def delta_ai_page() -> None:
                 prompt=text_prompt
 
         if prompt:
-            st.info(f"Question: {prompt}")
+            st.markdown(
+                """
+                <div style='text-align: left;'>
+                    <span style='color: yellow; padding-bottom: 10px;'>Question</span>
+                </div>
+                """, 
+                unsafe_allow_html=True
+            )
+
+            st.code(prompt,language="text",wrap_lines=True)
             with st.spinner("Generating response..."):
                 agent = chatbot_handler(dfs=st.session_state['dfs'], query=prompt)
                 display_results(agent)
