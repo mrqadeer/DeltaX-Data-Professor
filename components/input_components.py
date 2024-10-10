@@ -32,54 +32,73 @@ def get_model_and_key(provider_choice: str)-> Tuple[Optional[str], Optional[str]
                 llm_choice=st.selectbox(f"{provider} Models",[])
     return  key,llm_choice
 
-
-@st.dialog("Sign In to get touch in DeltaX")
+@st.dialog("Sign In to get in touch with DeltaX")
 def get_credentials():
-    """
-    Prompt the user to sign in to the application by providing their username, selecting a provider, and entering their API key and model name.
-
-    The user is prompted to enter their API key and select a model for the given provider choice in a separate dialog.
-
-    If the user enters all the required information and clicks the "Submit" button, the signed_in flag is set to True and the user is redirected to the DeltaX Data Professor page.
-
-    If the user does not enter all the required information, the signed_in flag remains False and the user stays on the sign-in page.
-
-    Parameters:
-        None
-
-    Returns:
-        None
-    """
+    # Initialize session states if not set
+    if 'has_groq' not in st.session_state:
+        st.session_state['has_groq'] = False
+    if 'voice' not in st.session_state:
+        st.session_state['voice'] = False
+    if 'signed_in' not in st.session_state:
+        st.session_state['signed_in'] = False
+    if 'groq_api_key' not in st.session_state:
+        st.session_state['groq_api_key'] = None
+    # Get user input for username and provider selection
     st.session_state['username'] = st.text_input("Username")
     st.session_state['provider'] = st.selectbox("Provider", ["PandasAI", "OpenAI", "Google Gemini", "Groq", "Antropic"])
-    st.markdown(f"<span style='color: yellow;'>Get {PROVIDERS[st.session_state['provider']]['key']}&nbsp;</span><a href='{PROVIDERS[st.session_state['provider']]['url']}' target='_blank'>here</a>", unsafe_allow_html=True)
+
+    # Automatically turn on voice assistant if provider is Groq
+    if st.session_state['provider'] == 'Groq':
+        st.session_state['has_groq'] = True
+        st.session_state['voice'] = True  # Automatically turn on voice for Groq
+        st.session_state['groq_api_key'] = st.session_state.get('api_key', None)  # Set groq_api_key to api_key
+    else:
+        st.session_state['has_groq'] = False
+        if not st.session_state['voice']:  # If not manually toggled on
+            st.session_state['voice'] = False  # Turn off voice for other providers
+
+    # Display link to get API key
+    st.markdown(f"<span style='color: yellow;'>Get {PROVIDERS[st.session_state['provider']]['key']}&nbsp;</span>"
+                f"<a href='{PROVIDERS[st.session_state['provider']]['url']}' target='_blank'>here</a>", 
+                unsafe_allow_html=True)
+
+    # Collect API key and model based on provider
     st.session_state['api_key'], st.session_state['llm_choice'] = get_model_and_key(st.session_state['provider'])
-    
-    # Check if all fields are filled to enable the submit button
+
+    # Display the voice assistant toggle checkbox (always visible)
+    voice = st.checkbox("Voice Assistant", value=st.session_state['voice'])
+
+    # If the user selects the voice assistant for non-Groq providers, ask for the Groq API key
+    if voice:
+        st.session_state['voice'] = True
+        if st.session_state['provider'] != 'Groq':
+            st.session_state['groq_api_key'] = st.text_input("Enter Groq API Key",type='password')
+    else:
+        st.session_state['voice'] = False
+
+    # Check if all required fields are filled to enable submit button
     if st.session_state['username'] and st.session_state['provider'] and st.session_state['api_key'] and st.session_state['llm_choice']:
         st.session_state['signed_in'] = True
-        
     else:
         st.session_state['signed_in'] = False
 
-    submit = st.button("Submit", disabled=not st.session_state['signed_in'],key="submit")
+    # Submit button
+    submit = st.button("Submit", disabled=not st.session_state['signed_in'], key="submit")
 
     if submit:
-        # if save_credentials(st.session_state['llm_choice'], st.session_state['api_key']):
         st.success(f"Nice to have you {st.session_state['username'].title()}!")
         st.session_state['credentials'] = {
-                                        st.session_state['provider']:{
-                                           'api_key': st.session_state['api_key'], 
-                                           'model': st.session_state['llm_choice'],
-                                           'temperature': 0.7}
-                                            }
+            st.session_state['provider']: {
+                'api_key': st.session_state['api_key'],
+                'model': st.session_state['llm_choice'],
+                'temperature': 0.7
+            }
+        }
         st.session_state['signed_in'] = True
         time.sleep(1.5)
         st.switch_page("views/delta_ai.py")
-        
     else:
-        return 
-    
+        return
 def get_uploaded_files() -> Union[List[Any], Any]:
     
     """
@@ -247,40 +266,6 @@ def get_postgresql_credentials() -> Dict:
     else:
         
         return None
-
-
-@st.dialog("Groq API Key For Voice Assistant")
-def get_groq_api_key()->None:
-    """
-    Presents the user with a text input field to enter their Groq API key.
-
-    The user is prompted to enter their API key and click the "Submit" button.
-
-    If the user enters a valid API key and clicks the "Submit" button, the API key is stored in the session state and the dialog is closed.
-
-    If the user does not enter a valid API key and clicks the "Submit" button, the dialog remains open and the user is prompted to enter a valid API key.
-
-    Parameters:
-        None
-
-    Returns:
-        None
-    """
-    if 'groq_api_key' not in st.session_state:
-        st.session_state['groq_api_key'] = None  # Start with None to track if key has been set
-    
-    if st.session_state['groq_api_key'] is None:
-        st.markdown("<span>For Voice input you have to give a Groq API key</span>", unsafe_allow_html=True)
-        groq_api_key = st.text_input("Enter your Groq API key", type="password")
-        
-        st.markdown(f"<span style='color: yellow;'>Get {PROVIDERS['Groq']['key']}&nbsp;</span><a href='{PROVIDERS['Groq']['url']}' target='_blank'>here</a>", unsafe_allow_html=True)
-        
-        submit = st.button("Submit")
-        if submit:
-            
-            st.session_state['groq_api_key'] = groq_api_key
-            
-            st.success("Thanks for providing your Groq API key!.Close the dialog to continue")
             
        
 def get_recording()-> bytes:
@@ -298,8 +283,8 @@ def get_recording()-> bytes:
         bytes: The recorded audio, or None if no audio was recorded.
     """
     recording = mic_recorder(
-                        start_prompt="🎙️Start Recording",
-                        stop_prompt="🛑 Stop Recording",
+                        start_prompt="🎙️Record",
+                        stop_prompt="🛑 Stop",
                         just_once=False,
                         use_container_width=False
                     )

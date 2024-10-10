@@ -3,7 +3,7 @@ import io
 import streamlit as st
 from groq import Groq
 import groq
-def transcribe_audio(audio_bytes, model="whisper-large-v3"):
+def transcribe_audio(audio_bytes,api_key, model="whisper-large-v3"):
     
     """
     Sends audio bytes to Groq for transcription.
@@ -24,7 +24,7 @@ def transcribe_audio(audio_bytes, model="whisper-large-v3"):
     """
     # Convert audio bytes to a file-like object using io.BytesIO
     try:
-        client = Groq()
+        client = Groq(api_key=api_key)
         audio_file = io.BytesIO(audio_bytes)
         audio_file.name = "recorded_audio.wav"  # Assign a name with the appropriate extension
 

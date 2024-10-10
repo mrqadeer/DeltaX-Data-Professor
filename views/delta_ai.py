@@ -8,7 +8,7 @@ from components.display_components import (display_welcome_message,
 from components.input_components import (get_uploaded_files, 
                                          get_database,
                                          get_database_credentials,
-                                         get_recording,get_groq_api_key)
+                                         get_recording)
 
 from src.hanlders.files_handlers import handle_uploaded_files
 from src.hanlders.database_hanlders import handle_database_connection
@@ -43,10 +43,6 @@ def delta_ai_page() -> None:
         st.session_state['process'] = False
     if 'dfs' not in st.session_state:
         st.session_state['dfs'] = None
-    if 'voice' not in st.session_state:
-        st.session_state['voice'] = False
-    if 'is_key' not in st.session_state:
-        st.session_state['is_key'] = False
 
     # Initialize local variables to None
     uploaded_files = None
@@ -92,21 +88,26 @@ def delta_ai_page() -> None:
         with st.expander("Data Preview"):
             display_dataframes(st.session_state['dfs'])
         
-        cols = st.columns([2,8], gap="small")
+        cols = st.columns([1.5, 9], gap="small")
+        # st.session_state.clear()
+    
+        # st.info(f"Groq{st.session_state.api_key}")
+        # st.info(f"Voice {st.session_state.groq_api_key}")
         
         prompt=None          
-       
-        with cols[0]:
-            audio_bytes = get_recording()
-            if audio_bytes is not None:
-                audio_prompt=transcribe_audio(audio_bytes)
-                if audio_prompt:
-                    prompt=audio_prompt
+        if st.session_state['groq_api_key'] is not None:
+            with cols[0]:
+                audio_bytes = get_recording()
+                if audio_bytes is not None:
+                    audio_prompt=transcribe_audio(audio_bytes,api_key=st.session_state['groq_api_key'])
+                    if audio_prompt:
+                        prompt=audio_prompt
                     
         
-        with cols[1]:
+            with cols[1]:
+                text_prompt = st.chat_input("Ask a question about the data")
+        else:
             text_prompt = st.chat_input("Ask a question about the data")
-        
             if text_prompt:
                 prompt=text_prompt
 
