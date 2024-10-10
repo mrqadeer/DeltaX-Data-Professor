@@ -38,7 +38,7 @@ def display_dataframes(dfs: list) -> None:
     """
     for i, df in enumerate(dfs):
         st.info(f"Dataframe {i+1} with {df.shape[0]} rows and {df.shape[1]} columns")
-        st.dataframe(df.head(), use_container_width=True)
+        st.dataframe(df, use_container_width=True)
   
 def display_results(agent: Agent) -> None:
     """
