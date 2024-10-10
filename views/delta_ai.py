@@ -106,6 +106,9 @@ def delta_ai_page() -> None:
         
             with cols[1]:
                 text_prompt = st.chat_input("Ask a question about the data")
+                if text_prompt:
+                    prompt=text_prompt
+
         else:
             text_prompt = st.chat_input("Ask a question about the data")
             if text_prompt:
