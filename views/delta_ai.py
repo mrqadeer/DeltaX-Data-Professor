@@ -95,7 +95,7 @@ def delta_ai_page() -> None:
         # st.info(f"Voice {st.session_state.groq_api_key}")
         
         prompt=None          
-        if st.session_state['groq_api_key'] is not None:
+        if st.session_state['groq_api_key'] is not None and st.session_state['has_groq']:
             with cols[0]:
                 audio_bytes = get_recording()
                 if audio_bytes is not None:
